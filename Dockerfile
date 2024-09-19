@@ -30,11 +30,19 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Add the directories
+COPY RocketJot /root/RocketJot
+COPY magento /root/magento
+COPY jobprofile_builds /root/jobprofile_builds
+
+# Create a virtual environment named RedSkyAlliance in the root directory
+RUN python3 -m venv /root/RedSkyAlliance
+
+# Activate the virtual environment and install requirements
+RUN /bin/bash -c "source /root/RedSkyAlliance/bin/activate && pip3 install -r /root/RocketJot/requirements.txt"
+
 # Set the working directory
 WORKDIR /root/RocketJot
-
-# Add the RocketJot directory
-COPY RocketJot /root/RocketJot
 
 # Run commands when the container starts (optional)
 CMD ["bash"]
